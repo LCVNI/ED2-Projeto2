@@ -1,6 +1,16 @@
+import subprocess
+import time
 def cadastrarAluno():
     nomeAluno = input("Nome do aluno: ")
-    matricula = input("Matricula: ")
+    while True:
+        matricula = input("Matricula: ")
+        if matricula in alunos:
+            print("Matricula ja cadastrada!")
+            time.sleep(3)
+            subprocess.run('cls', shell=True)
+        else:
+            break
+    curso = input("Curso: ")
     notas = []
     i = 0
     while True:
@@ -11,23 +21,38 @@ def cadastrarAluno():
             i = i-1
         else:
             notas.append(nota)
-        resp = input("Cadastrar outra nota? s/n")
-        if resp == "n":
-            break
-    return nomeAluno, matricula, notas
+            if i == 3:
+                break
+    #time.sleep(1)
+    subprocess.run('cls', shell=True)
+    return nomeAluno, matricula, curso, notas
+
+def consultarAluno(consulta):
+    if consulta in alunos:
+        dados = alunos[consulta]
+        for chave, valor in dados.items():
+            print(f"{chave}: {valor}")
+
 
 if __name__ == "__main__":
-    alunos = []
+    alunos = {}
     while True:
-        nome, matr, notas = cadastrarAluno()
+        nome, matr, curso,  notas = cadastrarAluno()
         novoAluno = {
             "nome": nome,
-            "matricula": matr,
+            "curso": curso,
             "notas": notas,
         }
-        alunos.append(novoAluno)
-        resp = input("Cadastrar outro aluno? s/n")
+        alunos[matr] = novoAluno
+        resp = input("Cadastrar outro aluno? s/n \n")
         if resp == 'n':
             break
+        print("Consultar alunos cadastrados (por matriucla)? s/n")
+        resp = input()
+        if resp == 's':
+         consulta = input("Informar matriucla: ")
+         consultarAluno(consulta)
+    '''print("Alunos:")
+    for matr, dados in alunos.items():
+        print(f"{matr}: " + f"{dados['nome']} " + f"Curso {curso}" + f"Notas: {dados['notas']}")'''
     
-        
